@@ -26,7 +26,7 @@ if __name__ == '__main__':
     data,labels=createDataSet()
     print knn([10, 9], data, labels,3)
     # plt.plot(data,'*')
-    plt.plot([1,2,10,11],[1,2,10,11], '*')
+    plt.plot(data[:,0],data[:,1], '*')
     plt.plot(10,9,'ro')
     plt.axis([0,12, 0, 12])
     plt.show()

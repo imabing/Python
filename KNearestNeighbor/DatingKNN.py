@@ -1,5 +1,6 @@
 # -*- coding: cp936 -*-
 import numpy as np
+import matplotlib.pyplot as plt
 from KNN import knn
 def fileToMatrix(fileName):
     fr=open(fileName)
@@ -16,6 +17,11 @@ def fileToMatrix(fileName):
         maxtrix[index,:] = listFromline[0:3]
         labels.append(int(listFromline[-1]))
         index += 1
+    # 画图
+    # fig=plt.figure()
+    # ax=fig.add_subplot(111)
+    # ax.scatter(maxtrix[:,1],maxtrix[:,2])
+    # plt.show()
     return maxtrix,labels
 # 归一化：(当前值-最小值)/(最大值-最小值)
 def normalize(dataSet):
@@ -28,7 +34,7 @@ def normalize(dataSet):
     subMatrix = subMatrix / np.tile(ranges, (dataSize, 1))
     return  subMatrix,ranges,minVal
 # 测试正确率
-def test():
+def testErrorRatio():
     ratio=0.1
     errorRatio=0.0
     # 读取数据源？
@@ -48,9 +54,16 @@ def test():
     errorRatio=errorRatio/float(testNum)
     print 'errorRatio is:%f' %errorRatio
 
-
+def predicte(point):
+    result = ['dislike', 'like', 'love']
+    maxtrix, labels=fileToMatrix('datingTestSet2.txt')
+    subMatrix, ranges, minVal = normalize(maxtrix)
+    predictedLabel=knn((point-minVal)/ranges,subMatrix,labels,3)
+    return result[predictedLabel-1];
 if __name__ == '__main__':
     # maxtrix,labels=fileToMatrix('datingTestSet2.txt')
     # print maxtrix
     # print normalize(maxtrix)
-    test()
+    # testErrorRatio()
+    point=[5000000,0,0]
+    print predicte(point)
