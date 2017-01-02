@@ -3,11 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import operator
 def createDataSet():
-    data=np.array([[1,1],[1,2],[10,10],[10,11]])
+    data=np.array([[1,1],[2,2],[10,10],[11,11]])
     labels=['A','A','B','B']
     return data,labels
 def knn(point,data,labels,k):
+    # 数据集行数
     dataSize=data.shape[0]
+    # tile复制数组，b = tile(a,(m,n)):即是把a数组里面的元素复制n次放进一个数组c中，然后再把数组c复制m次放进一个数组b中
     subMatrix=np.tile(point,(dataSize,1))-data
     matrixSq=subMatrix**2
     distance=(matrixSq.sum(axis=1))**0.5
@@ -22,6 +24,10 @@ def knn(point,data,labels,k):
     return sortedSelectK[0][0]
 if __name__ == '__main__':
     data,labels=createDataSet()
-    plt.plot(data, labels)
+    print knn([10, 9], data, labels,3)
+    # plt.plot(data,'*')
+    plt.plot([1,2,10,11],[1,2,10,11], '*')
+    plt.plot(10,9,'ro')
+    plt.axis([0,12, 0, 12])
     plt.show()
-    print knn([5,7],data,labels,3)
+
