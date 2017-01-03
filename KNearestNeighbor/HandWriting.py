@@ -31,7 +31,7 @@ def test():
     testMatrix, testLables = readData('testDigits')
     testNum=len(testLables)
     for i in  range(testNum):
-        predictedLabel=knn(testMatrix[i,:],trainingMatrix,trainingLables,3)
+        predictedLabel=knn(testMatrix[i,:],trainingMatrix,trainingLables,5)
         correctLabel = testLables[i]
         print 'predictedLabel: %d,correctLabel: %d' % (predictedLabel, correctLabel)
         if (predictedLabel != correctLabel):
