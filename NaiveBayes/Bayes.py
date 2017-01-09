@@ -29,23 +29,23 @@ def setOfWords2Vec(vocabSet, inputSet):
 
 
 def trainNB0(trainMatrix, trainCategory):  #输入：语料库向量矩阵与标签
-    numTrain = len(trainMatrix)
-    numWords = len(trainMatrix[0])
-    pAbusive = sum(trainCategory) / float(numTrain)   #去重后关键字与总关键字之比
-    p0Num = np.ones(numWords);   #构造初始值为1的矩阵，numpy.zeros初始值为0
-    p1Num = np.ones(numWords)  # change to ones()
-    p0Denom = 2.0;
-    p1Denom = 2.0  # change to 2.0
-    for i in range(numTrain):
+    numLine = len(trainMatrix)        #矩阵行数 6
+    numWords = len(trainMatrix[0])     #矩阵列数 32
+    p1 = sum(trainCategory) / float(numLine)   #语料中垃圾邮件 1 占的比重
+    matrix0 = np.ones(numWords);   #构造初始值为1的矩阵，numpy.zeros初始值为0
+    matrix1 = np.ones(numWords)  # change to ones()
+    totalWord0 = 2.0;
+    totalWord1 = 2.0
+    for i in range(numLine):
         if trainCategory[i] == 1:
-            p1Num += trainMatrix[i]
-            p1Denom += sum(trainMatrix[i])
+            matrix1 += trainMatrix[i]       #统计每个关键字出现的次数
+            totalWord1 += sum(trainMatrix[i])  #每条记录关键字数累加
         else:
-            p0Num += trainMatrix[i]
-            p0Denom += sum(trainMatrix[i])
-    p1Vect = np.log(p1Num / p1Denom)  # change to log()
-    p0Vect = np.log(p0Num / p0Denom)  # change to log()
-    return p0Vect, p1Vect, pAbusive
+            matrix0 += trainMatrix[i]
+            totalWord0 += sum(trainMatrix[i])
+    p1Vect = np.log( matrix1 / totalWord1)  # matrix1 / totalWord1  每个关键字在该类中出现的概率
+    p0Vect = np.log(matrix0 / totalWord0)  # change to log()
+    return p0Vect, p1Vect, p1
 
 
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
@@ -63,15 +63,14 @@ def testingNB():
     trainMat = []                              #把语料的每一个样本都转换为向量矩阵[[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1], [0, 0,...
     for line in dataSet:
         trainMat.append(setOfWords2Vec(vocabList, line))
-    p0V, p1V, pAb = trainNB0(np.array(trainMat), np.array(labels))
-    print trainMat
-    print np.array(trainMat)
+    p0V, p1V, p1 = trainNB0(np.array(trainMat), np.array(labels))
+
     testEntry = ['love', 'my', 'dalmation','哈哈哈']
     thisDoc = np.array(setOfWords2Vec(vocabList, testEntry))
-    print testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb)
+    print testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, p1)
     testEntry = ['stupid', 'garbage']
     thisDoc = np.array(setOfWords2Vec(vocabList, testEntry))
-    print testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb)
+    print testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V,p1)
 
 
 if __name__ == '__main__':
