@@ -36,7 +36,6 @@ def buildStump(dataArr, classLabels, D):
                 errArr = np.mat(np.ones((m, 1)))
                 errArr[predictedVals == labelMat] = 0
                 weightArr = D.T * errArr
-
                 if weightArr < minError:
                     minError = weightArr
                     bestClassEst = predictedVals.copy()
