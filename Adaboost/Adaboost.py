@@ -17,18 +17,18 @@ def stumpClassify(datMatrix, dimen, threshval, threshIneq): #dimen维度：X维o
         retArray[datMatrix[:, dimen] > threshval] = -1.0
     return retArray
 #单层决策树生成函数
-def buildStump(dataArr, classLabels, D):
+def buildStump(dataArr, classLabels, D):  #D：权重
     dataMatrix = np.mat(dataArr)
     labelMat = np.mat(classLabels).T
     m, n = np.shape(dataMatrix)
     numSteps = 10.0
-    bestStump = {}
+    bestStump = {}  #空字典
     bestClassEst = np.mat(np.zeros((m, 1)))
     minError = np.inf
     for i in range(n):
         rangeMin = dataMatrix[:, i].min()
         rangeMax = dataMatrix[:, i].max()
-        stepSize = (rangeMax - rangeMin) / numSteps
+        stepSize = (rangeMax - rangeMin) / numSteps  #步长
         for j in range(-1, int(numSteps) + 1):
             for inequal in ['lt', 'gt']:
                 threshval = (rangeMin + float(j) * stepSize)
