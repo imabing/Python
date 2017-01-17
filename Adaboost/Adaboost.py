@@ -8,14 +8,15 @@ def loadSimData():
                         [2.0, 1.0]])
     classLabels = [1.0, 1.0, -1.0, -1.0, 1.0]
     return datMat, classLabels
-def stumpClassify(datMatrix, dimen, threshval, threshIneq):
+#根据阈值进行分类，左边为-1，右边为1
+def stumpClassify(datMatrix, dimen, threshval, threshIneq): #dimen维度：X维or Y维；threshval阈值；threshIneq左边取1还是右边取1
     retArray = np.ones((np.shape(datMatrix)[0], 1))
     if threshIneq == 'lt':
         retArray[datMatrix[:, dimen] <= threshval] = -1.0
     else:
         retArray[datMatrix[:, dimen] > threshval] = -1.0
     return retArray
-
+#单层决策树生成函数
 def buildStump(dataArr, classLabels, D):
     dataMatrix = np.mat(dataArr)
     labelMat = np.mat(classLabels).T
@@ -51,7 +52,6 @@ def adaBoostTrainDs(dataArr, classLabels, numIt=40):
     aggClassEst = np.mat(np.zeros((m, 1)))
     for i in range(numIt):
         bestStump, error, classEst = buildStump(datMat, classLabels, D)
-
         print 'D:', D.T
 
         alpha = float(0.5 * np.log((1.0 - error) / np.max(error, 1e-16)))
