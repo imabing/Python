@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import numpy as np
 from numpy import ones
 def loadSimData():
@@ -18,14 +19,16 @@ def stumpClassify(datMatrix, dimen, threshval, threshIneq): #dimen维度：X维o
     return retArray
 #单层决策树生成函数
 def buildStump(dataArr, classLabels, D):  #D：权重
+    # 1、初始化工作
     dataMatrix = np.mat(dataArr)
     labelMat = np.mat(classLabels).T
     m, n = np.shape(dataMatrix)
-    numSteps = 10.0
-    bestStump = {}  #空字典
+    numSteps = 10.0  #在特征所有可能值上遍历
+    bestStump = {}  #空字典，存储得到的最佳单层决策树
     bestClassEst = np.mat(np.zeros((m, 1)))
-    minError = np.inf
-    for i in range(n):
+    minError = np.inf   #初始化为正无穷大
+    # 2、开始迭代工作
+    for i in range(n):  #遍历N个特征
         rangeMin = dataMatrix[:, i].min()
         rangeMax = dataMatrix[:, i].max()
         stepSize = (rangeMax - rangeMin) / numSteps  #步长
@@ -34,8 +37,8 @@ def buildStump(dataArr, classLabels, D):  #D：权重
                 threshval = (rangeMin + float(j) * stepSize)
                 predictedVals = stumpClassify(dataMatrix, i, threshval, inequal)
                 errArr = np.mat(np.ones((m, 1)))
-                errArr[predictedVals == labelMat] = 0
-                weightArr = D.T * errArr
+                errArr[predictedVals == labelMat] = 0  #预测错误为1
+                weightArr = D.T * errArr  #错误元素权重矩阵
                 if weightArr < minError:
                     minError = weightArr
                     bestClassEst = predictedVals.copy()
@@ -75,7 +78,8 @@ def adaBoostTrainDs(dataArr, classLabels, numIt=40):
 
 
 if __name__ == '__main__':
-    D = np.mat(np.ones((5, 1)) / 5)
-    datMat, classLabels = loadSimData()
-    bestStump, minError, bestClassEst = buildStump(datMat, classLabels, D)
-    adaBoostTrainDs(datMat, classLabels, 10)
+     D = np.mat(np.ones((5, 1)) / 5)
+     datMat, classLabels = loadSimData()
+     bestStump, minError, bestClassEst = buildStump(datMat, classLabels, D)
+     # adaBoostTrainDs(datMat, classLabels, 10)
+     print  bestClassEst
