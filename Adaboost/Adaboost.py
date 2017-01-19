@@ -47,39 +47,32 @@ def buildStump(dataArr, classLabels, D):  #D：权重
                     bestStump['ineq'] = inequal
     return bestStump, minError, bestClassEst
 
-def adaBoostTrainDs(dataArr, classLabels, numIt=40):
-    werkClassArr = []
-    m = np.shape(dataArr)[0]
+def adaBoostTrainDs(dataArr, classLabels, numIt=40):   #numIt：迭代次数
+    weakClassArr = []    #弱分类器
+    m = np.shape(dataArr)[0]  #5个数据
     D = np.mat(np.ones((m, 1)) / m)
     aggClassEst = np.mat(np.zeros((m, 1)))
     for i in range(numIt):
         bestStump, error, classEst = buildStump(datMat, classLabels, D)
         print 'D:', D.T
-
-        alpha = float(0.5 * np.log((1.0 - error) / np.max(error, 1e-16)))
+        alpha = float(0.5 * np.log((1.0 - error) / np.max(error, 1e-16)))   #分类器权重值
         bestStump['alpha'] = alpha
-        werkClassArr.append(bestStump)
-
-        print 'classEst', classEst
-
+        weakClassArr.append(bestStump)
+        print 'classEst', classEst  #打印分类结果
         expon = np.multiply(-1 * alpha * np.mat(classLabels).T, classEst)
         D = np.multiply(D, np.exp(expon))
         D = D / D.sum()
         aggClassEst += alpha * classEst
-
-        print 'aggClassEst', aggClassEst.T
-
+        print 'aggClassEst', aggClassEst.T   #打印带权重的分类结果
         aggErrors = np.multiply(np.sign(aggClassEst) != np.mat(classLabels).T, np.ones((m, 1)))
         errorRate = aggErrors.sum() / m
         print 'total error:', errorRate
         if errorRate == 0.0:
             break
-    return werkClassArr
-
-
+    return weakClassArr
 if __name__ == '__main__':
      D = np.mat(np.ones((5, 1)) / 5)
      datMat, classLabels = loadSimData()
      bestStump, minError, bestClassEst = buildStump(datMat, classLabels, D)
-     # adaBoostTrainDs(datMat, classLabels, 10)
-     print  bestClassEst
+     print adaBoostTrainDs(datMat, classLabels, 90)
+
