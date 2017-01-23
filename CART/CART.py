@@ -46,8 +46,7 @@ def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):
     mat0, mat1 = binSplitDataSet(dataSet, bestIndex, bestValue)
     if (np.shape(mat0)[0] < tolN) or (np.shape(mat1)[0] < tolN):  #exit cond 3
         return None, leafType(dataSet)
-    return bestIndex,bestValue#returns the best feature to split on
-                              #and the value used for that split
+    return bestIndex,bestValue
 def createTree(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):#assume dataSet is NumPy Mat so we can array filtering
     #print dataSet.shape
     feat, val = chooseBestSplit(dataSet, leafType, errType, ops)#choose the best split
