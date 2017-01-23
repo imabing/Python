@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 import numpy as np
-def loadDataSet(fileName):
+def loadDataSet(fileName):  #装载文件
     dataMat = []
     fr = open(fileName)
     for line in fr.readlines():
