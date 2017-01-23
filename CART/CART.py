@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 import numpy as np
-def loadDataSet(fileName):      #general function to parse tab -delimited floats
-    dataMat = []                #assume last column is target value
+def loadDataSet(fileName):
+    dataMat = []
     fr = open(fileName)
     for line in fr.readlines():
         curLine = line.strip().split('\t')
-        fltLine = map(float,curLine) #map all elements to float()
+        fltLine = map(float,curLine) 
         dataMat.append(fltLine)
     return dataMat
 def binSplitDataSet(dataSet, feature, value):
