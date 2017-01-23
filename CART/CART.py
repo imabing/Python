@@ -5,7 +5,7 @@ def loadDataSet(fileName):
     fr = open(fileName)
     for line in fr.readlines():
         curLine = line.strip().split('\t')
-        fltLine = map(float,curLine) 
+        fltLine = map(float,curLine)
         dataMat.append(fltLine)
     return dataMat
 def binSplitDataSet(dataSet, feature, value):
@@ -42,7 +42,7 @@ def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):
                 bestS = newS
     #if the decrease (S-bestS) is less than a threshold don't do the split
     if (S - bestS) < tolS:
-        return None, leafType(dataSet) #exit cond 2
+        return None, leafType(dataSet)
     mat0, mat1 = binSplitDataSet(dataSet, bestIndex, bestValue)
     if (np.shape(mat0)[0] < tolN) or (np.shape(mat1)[0] < tolN):  #exit cond 3
         return None, leafType(dataSet)
