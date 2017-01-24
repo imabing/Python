@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 import numpy as np
-def loadDataSet(fileName):  #装载文件
+def loadDataSet(fileName):  #装载数据
     dataMat = []
     fr = open(fileName)
     for line in fr.readlines():
@@ -8,7 +8,7 @@ def loadDataSet(fileName):  #装载文件
         fltLine = map(float,curLine)
         dataMat.append(fltLine)
     return dataMat
-def binSplitDataSet(dataSet, feature, value):
+def binSplitDataSet(dataSet, feature, value): #数据，特征，值
     mat0 = dataSet[np.nonzero(dataSet[:,feature] > value)[0],:]
     #print dataSet[np.nonzero(dataSet[:,feature] > value)[0],:]
     #print np.nonzero(dataSet[:,feature] > value)
@@ -20,7 +20,7 @@ def regLeaf(dataSet):#returns the value used for each leaf
     return np.mean(dataSet[:,-1])
 def regErr(dataSet):
     return np.var(dataSet[:,-1]) * np.shape(dataSet)[0]
-def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):
+def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):  #数据集划分两部分，建立叶子节点函数，误差计算函数，其他参数
     tolS = ops[0]; tolN = ops[1]
     #if all the target variables are the same value: quit and return value
     if len(set(dataSet[:,-1].T.tolist()[0])) == 1: #exit cond 1
@@ -47,7 +47,7 @@ def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):
     if (np.shape(mat0)[0] < tolN) or (np.shape(mat1)[0] < tolN):  #exit cond 3
         return None, leafType(dataSet)
     return bestIndex,bestValue
-def createTree(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):#assume dataSet is NumPy Mat so we can array filtering
+def createTree(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):#
     #print dataSet.shape
     feat, val = chooseBestSplit(dataSet, leafType, errType, ops)#choose the best split
     if feat == None: return val #if the splitting hit a stop condition return val
